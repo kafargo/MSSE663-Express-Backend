@@ -6,7 +6,7 @@
   },
   "deploy": {
     "startCommand": "node server.js",
-    "healthcheckPath": "https://msse663-express-backend-production.up.railway.app/api/health",
+    "healthcheckPath": "/ping",
     "healthcheckTimeout": 300,
     "restartPolicyType": "ON_FAILURE"
   }

@@ -48,6 +48,12 @@ app.use(express.static('public'));
 app.use('/api/triangles', triangleRoutes);
 app.use('/api/health', healthRoutes);
 
+// Simple ping endpoint for basic health checking
+app.get('/ping', (req, res) => {
+  console.log('Ping endpoint called');
+  res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
 // Root route (will now serve index.html from public folder)
 app.get('/', (req, res) => {
   res.sendFile('index.html', { root: './public' });

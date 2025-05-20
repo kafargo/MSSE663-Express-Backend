@@ -8,6 +8,10 @@ import os from 'os';
  */
 export const getHealthStatus = async (req: Request, res: Response): Promise<void> => {
   try {
+    console.log('Health check endpoint called:', new Date().toISOString());
+    console.log('Request URL:', req.originalUrl);
+    console.log('Request headers:', req.headers);
+    
     // Check MongoDB connection status
     const dbStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';
     
