@@ -44,13 +44,19 @@ Railway logs can help you diagnose issues:
 
 ## Debugging Tips
 
-The application includes a special health endpoint that shows environment variable status:
+The application includes two health endpoints for diagnosing issues:
 
 ```
 GET /api/health
 ```
 
-This endpoint will show which environment variables are properly set (without showing sensitive values).
+This endpoint provides detailed health information including environment variables status, MongoDB connection, and system information.
+
+```
+GET /ping
+```
+
+This is a simple healthcheck endpoint that returns a 200 status without requiring database connectivity. This endpoint is used by Railway for its healthcheck functionality.
 
 ## Manual Environment Variable Testing
 
