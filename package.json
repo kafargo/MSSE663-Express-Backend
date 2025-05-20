@@ -1,0 +1,41 @@
+{
+  "name": "msse663-express-backend",
+  "version": "1.0.0",
+  "description": "Backend for the MSSE 663 class",
+  "main": "dist/app.js",
+  "scripts": {
+    "start": "node dist/app.js",
+    "dev": "nodemon src/app.ts",
+    "build": "tsc -p .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed:import": "ts-node src/seeder.ts -i",
+    "seed:delete": "ts-node src/seeder.ts -d"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kafargo/MSSE663-Express-Backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kafargo/MSSE663-Express-Backend/issues"
+  },
+  "homepage": "https://github.com/kafargo/MSSE663-Express-Backend#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "mongoose": "^8.15.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.18",
+    "@types/express": "^5.0.2",
+    "@types/mongoose": "^5.11.96",
+    "@types/node": "^22.15.19",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}

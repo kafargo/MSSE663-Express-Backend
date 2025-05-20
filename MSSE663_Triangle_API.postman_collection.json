@@ -1,0 +1,191 @@
+{
+	"info": {
+		"_postman_id": "4e98c550-2f6d-4ef2-9868-5a6bf15d0642",
+		"name": "MSSE663 Triangle API",
+		"description": "Collection of requests for the MSSE663 Triangle Express API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get All Triangles",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/triangles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"triangles"
+					]
+				},
+				"description": "Retrieves all triangles from the database"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Triangle By ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/triangles/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"triangles",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{triangle_id}}"
+						}
+					]
+				},
+				"description": "Retrieves a specific triangle by its ID"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Triangle",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sideA\": 3,\n    \"sideB\": 4,\n    \"sideC\": 5\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/triangles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"triangles"
+					]
+				},
+				"description": "Creates a new triangle with the specified three sides (sideA, sideB, sideC)"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Triangle",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sideA\": 6,\n    \"sideB\": 8,\n    \"sideC\": 10\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/triangles/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"triangles",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{triangle_id}}"
+						}
+					]
+				},
+				"description": "Updates a triangle with new side values"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Triangle Area",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/triangles/:id/area",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"triangles",
+						":id",
+						"area"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{triangle_id}}"
+						}
+					]
+				},
+				"description": "Calculates the area of a triangle using Heron's formula"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Triangle",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/triangles/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"triangles",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{triangle_id}}"
+						}
+					]
+				},
+				"description": "Deletes a triangle by its ID"
+			},
+			"response": []
+		}
+	],
+	"event": [],
+	"variable": [
+		{
+			"key": "triangle_id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
