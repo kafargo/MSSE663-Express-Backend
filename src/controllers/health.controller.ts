@@ -20,6 +20,14 @@ export const getHealthStatus = async (req: Request, res: Response): Promise<void
     // Get environment info
     const environment = process.env.NODE_ENV || 'development';
     
+    // Check key environment variables
+    const envStatus = {
+      MONGO_URI: process.env.MONGO_URI ? 'Set' : 'Not Set',
+      NODE_ENV: process.env.NODE_ENV || 'Not Set',
+      PORT: process.env.PORT || 'Not Set',
+      FRONTEND_URL: process.env.FRONTEND_URL || 'Not Set'
+    };
+    
     // Get application info
     const serverTime = new Date().toISOString();
     
@@ -31,6 +39,7 @@ export const getHealthStatus = async (req: Request, res: Response): Promise<void
           uptime: `${Math.floor(uptime / 60)} minutes, ${Math.floor(uptime % 60)} seconds`,
           timestamp: serverTime,
           environment,
+          environmentVariables: envStatus,
           memoryUsage: {
             rss: `${Math.round(memoryUsage.rss / (1024 * 1024))} MB`,
             heapTotal: `${Math.round(memoryUsage.heapTotal / (1024 * 1024))} MB`,

@@ -98,6 +98,8 @@ The API validates that the triangle is valid using the triangle inequality theor
 
 This application is ready to be deployed on Railway.
 
+For detailed deployment instructions including environment variable troubleshooting, see [DEPLOYMENT.md](DEPLOYMENT.md).
+
 ### Deployment Steps
 
 1. Push the code to a GitHub repository

@@ -5,8 +5,15 @@ dotenv.config();
 
 const connectDB = async (): Promise<void> => {
   try {
-    // Log what connection string we're using (without sensitive info)
+    // Log environment information to help with debugging
+    console.log(`Node Environment: ${process.env.NODE_ENV}`);
     console.log(`Attempting to connect to MongoDB...`);
+    
+    // Check for environment variables
+    const envKeys = Object.keys(process.env).filter(key => 
+      !key.startsWith('npm_') && !key.startsWith('_')
+    );
+    console.log(`Available environment variables: ${envKeys.join(', ')}`);
     
     const mongoURI = process.env.MONGO_URI as string;
     if (!mongoURI) {

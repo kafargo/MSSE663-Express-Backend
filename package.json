@@ -4,12 +4,13 @@
   "description": "Backend for the MSSE 663 class",
   "main": "dist/app.js",
   "scripts": {
-    "start": "node dist/app.js",
+    "start": "node -r dotenv/config dist/app.js",
     "dev": "nodemon src/app.ts",
     "build": "tsc -p .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed:import": "ts-node src/seeder.ts -i",
-    "seed:delete": "ts-node src/seeder.ts -d"
+    "seed:delete": "ts-node src/seeder.ts -d",
+    "diagnose": "node diagnose.js"
   },
   "repository": {
     "type": "git",

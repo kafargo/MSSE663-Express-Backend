@@ -17,6 +17,12 @@ if [ $? -eq 0 ]; then
     echo "Copying additional files..."
     cp -r public dist/
     
+    # Copy .env file for local testing if it exists (won't be used in Railway)
+    if [ -f .env ]; then
+        echo "Copying .env file for local testing..."
+        cp .env dist/
+    fi
+    
     echo "Project is ready to run!"
 else
     echo "Build failed. Please fix the errors and try again."

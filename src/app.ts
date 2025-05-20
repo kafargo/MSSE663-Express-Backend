@@ -1,5 +1,8 @@
-import express, { Express, Request, Response, NextFunction } from 'express';
+// Load env vars before anything else
 import dotenv from 'dotenv';
+dotenv.config();
+
+import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import connectDB from './config/db';
@@ -8,8 +11,8 @@ import healthRoutes from './routes/health.routes';
 import logger from './middleware/logger.middleware';
 import errorHandler from './middleware/error.middleware';
 
-// Load env vars
-dotenv.config();
+// Log environment details on startup
+console.log(`Starting app in ${process.env.NODE_ENV} environment`);
 
 // Connect to MongoDB
 connectDB();
