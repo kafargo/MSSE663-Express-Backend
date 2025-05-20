@@ -22,6 +22,9 @@
     "url": "https://github.com/kafargo/MSSE663-Express-Backend/issues"
   },
   "homepage": "https://github.com/kafargo/MSSE663-Express-Backend#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",

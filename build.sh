@@ -1,13 +1,13 @@
 #!/bin/bash
-# Simple build script for the project
+# Build script for the project (works locally and in Railway)
 
 echo "Building TypeScript project..."
 
 # Create the dist directory if it doesn't exist
 mkdir -p dist
 
-# Run TypeScript compiler
-./node_modules/.bin/tsc -p .
+# Run TypeScript compiler (using npx for better compatibility)
+npx tsc -p .
 
 # Check if compilation was successful
 if [ $? -eq 0 ]; then

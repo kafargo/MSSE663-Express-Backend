@@ -36,9 +36,11 @@ npm install
 Create a `.env` file in the root directory with the following variables:
 
 ```
-MONGO_URI=mongodb://mongo:kPlPXeanRpHsLcnkWpMeOleSiTWdecXN@maglev.proxy.rlwy.net:15100/MSSE663
+MONGO_URI={your MongoDB connection string}
 PORT=3000
 NODE_ENV=development
+# Optional: URL of the frontend app that will access this API (for CORS)
+# FRONTEND_URL=http://localhost:5173
 ```
 
 ## Running the Application
@@ -91,6 +93,48 @@ The Triangle model represents a 2D triangle with three sides:
 ```
 
 The API validates that the triangle is valid using the triangle inequality theorem (the sum of the lengths of any two sides must be greater than the length of the remaining side).
+
+## Deployment on Railway
+
+This application is ready to be deployed on Railway.
+
+### Deployment Steps
+
+1. Push the code to a GitHub repository
+2. Log in to [Railway](https://railway.app/)
+3. Click "New Project" and select "Deploy from GitHub repo"
+4. Select the repository
+5. Railway will automatically detect the Node.js project and set up the build
+6. Add the following environment variables in the Railway dashboard:
+   - `MONGO_URI` (your MongoDB connection string)
+   - `NODE_ENV=production`
+   - `FRONTEND_URL` (optional, for CORS configuration - e.g., https://yourfrontend.com)
+   - Port will be automatically assigned by Railway
+
+The application is configured with:
+
+- A `Procfile` specifying the web process
+- A `railway.json` configuration file
+- Health check endpoint at `/api/health`
+- Proper build scripts in package.json
+
+### Monitoring
+
+Once deployed, you can monitor the application status through:
+
+- Railway's built-in logs and metrics
+- The application's `/api/health` endpoint
+
+### CORS Configuration
+
+The application is configured with CORS (Cross-Origin Resource Sharing) to allow frontend applications to make requests to the API:
+
+- In development mode, all origins are allowed (`*`)
+- In production mode, only specified domains are allowed:
+  - Update the origins list in `app.ts` with your frontend domain(s)
+  - Example: `['https://yourappdomain.com', 'https://*.railway.app']`
+
+To customize CORS settings for your specific use case, modify the CORS configuration in `src/app.ts`.
 
 ## License
 
