@@ -12,16 +12,30 @@ This is a RESTful API built with Express and TypeScript that connects to MongoDB
 ├── src/
 │   ├── app.ts                # Main application entry point
 │   ├── config/               # Configuration files
-│   │   └── db.ts             # Database connection
+│   │   ├── db.ts             # Database connection
+│   │   └── swagger.ts        # Swagger API documentation
 │   ├── controllers/          # Request handlers
+│   │   ├── health.controller.ts
 │   │   └── triangle.controller.ts
 │   ├── middleware/           # Custom middleware
-│   │   └── error.middleware.ts
+│   │   ├── error.middleware.ts
+│   │   ├── logger.middleware.ts
+│   │   └── validate.middleware.ts
 │   ├── models/               # Database models
 │   │   └── triangle.model.ts
 │   ├── routes/               # API routes
+│   │   ├── health.routes.ts
 │   │   └── triangle.routes.ts
-│   └── types/                # TypeScript type definitions
+│   ├── tests/                # Test suites
+│   │   ├── controllers/      # Controller tests
+│   │   ├── middleware/       # Middleware tests
+│   │   ├── models/           # Model tests
+│   │   └── utils/            # Utility tests
+│   ├── types/                # TypeScript type definitions
+│   └── utils/                # Utility functions
+│       ├── error.utils.ts    # Error handling utilities
+│       ├── logger.utils.ts   # Winston logger setup
+│       └── triangle.utils.ts # Triangle validation
 ```
 
 ## Installation
@@ -60,6 +74,24 @@ npm run seed:import
 
 # Delete all data
 npm run seed:delete
+
+# Run tests
+npm test
+
+# Run tests with watch mode
+npm run test:watch
+
+# Generate test coverage
+npm run test:coverage
+
+# Run ESLint
+npm run lint
+
+# Fix ESLint issues
+npm run lint:fix
+
+# Run diagnostics
+npm run diagnose
 ```
 
 ## Testing
@@ -69,16 +101,23 @@ The application includes:
 1. A simple HTML/JavaScript UI for testing the API available at the root URL (http://localhost:3000)
 2. A Postman collection file (`MSSE663_Triangle_API.postman_collection.json`) that can be imported into Postman
 
-## API Endpoints
+## API Documentation
+
+API documentation is available via Swagger UI at `/api-docs` when the server is running.
 
 ### Triangles
 
 - `GET /api/triangles` - Get all triangles
 - `GET /api/triangles/:id` - Get a specific triangle
-- `GET /api/triangles/:id/area` - Calculate the area of a triangle
+- `GET /api/triangles/:id/area` - Calculate the area and other properties of a triangle
 - `POST /api/triangles` - Create a new triangle with three sides (sideA, sideB, sideC)
 - `PUT /api/triangles/:id` - Update an existing triangle
 - `DELETE /api/triangles/:id` - Delete a triangle
+
+### Health Endpoints
+
+- `GET /api/health` - Get detailed health information about the application
+- `GET /ping` - Simple healthcheck endpoint (returns 200 OK)
 
 ### Triangle Model
 
@@ -91,6 +130,13 @@ The Triangle model represents a 2D triangle with three sides:
   "sideC": 5
 }
 ```
+
+The model provides the following virtual properties:
+
+- `area` - Area of the triangle (calculated using Heron's formula)
+- `perimeter` - Sum of all sides
+- `type` - Type of triangle (Equilateral, Isosceles, or Scalene)
+- `isValid` - Whether the triangle satisfies the triangle inequality theorem
 
 The API validates that the triangle is valid using the triangle inequality theorem (the sum of the lengths of any two sides must be greater than the length of the remaining side).
 

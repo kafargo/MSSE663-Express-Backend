@@ -31,7 +31,9 @@ const triangleSchema = new Schema<ITriangle>(
   },
   {
     timestamps: true,
-    collection: 'triangle' // Specify the collection name
+    collection: 'triangle', // Specify the collection name
+    toJSON: { virtuals: true }, // Include virtuals when converting to JSON
+    toObject: { virtuals: true } // Include virtuals when converting to object
   }
 );
 
@@ -61,6 +63,22 @@ triangleSchema.virtual('isValid').get(function() {
     this.sideA + this.sideC > this.sideB &&
     this.sideB + this.sideC > this.sideA
   );
+});
+
+// Virtual property for calculating perimeter
+triangleSchema.virtual('perimeter').get(function() {
+  return this.sideA + this.sideB + this.sideC;
+});
+
+// Virtual property for determining triangle type
+triangleSchema.virtual('type').get(function() {
+  if (this.sideA === this.sideB && this.sideB === this.sideC) {
+    return 'Equilateral';
+  } else if (this.sideA === this.sideB || this.sideB === this.sideC || this.sideA === this.sideC) {
+    return 'Isosceles';
+  } else {
+    return 'Scalene';
+  }
 });
 
 // Model creation

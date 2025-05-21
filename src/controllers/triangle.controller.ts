@@ -3,7 +3,38 @@ import Triangle, { ITriangle } from '../models/triangle.model';
 import { errorResponse, handleValidationError } from '../utils/error.utils';
 import { isValidTriangle } from '../utils/triangle.utils';
 
-// Get all triangles
+/**
+ * @swagger
+ * /triangles:
+ *   get:
+ *     summary: Get all triangles
+ *     description: Retrieve a list of all triangles from database
+ *     tags: [Triangles]
+ *     responses:
+ *       200:
+ *         description: List of triangles
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 count:
+ *                   type: integer
+ *                   example: 3
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Triangle'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export const getTriangles = async (req: Request, res: Response): Promise<void> => {
   try {
     const triangles = await Triangle.find();
@@ -127,12 +158,7 @@ export const calculateTriangleArea = async (req: Request, res: Response): Promis
       return;
     }
 
-    // Calculate area using Heron's formula
-    // First, calculate the semi-perimeter
-    const s = (triangle.sideA + triangle.sideB + triangle.sideC) / 2;
-    // Then, calculate the area
-    const area = Math.sqrt(s * (s - triangle.sideA) * (s - triangle.sideB) * (s - triangle.sideC));
-
+    // Using triangle model virtuals instead of recalculating
     res.status(200).json({
       success: true,
       data: {
@@ -140,8 +166,9 @@ export const calculateTriangleArea = async (req: Request, res: Response): Promis
         sideA: triangle.sideA,
         sideB: triangle.sideB,
         sideC: triangle.sideC,
-        area,
-        perimeter: triangle.sideA + triangle.sideB + triangle.sideC
+        area: triangle.get('area'),
+        perimeter: triangle.get('perimeter'),
+        type: triangle.get('type')
       }
     });
   } catch (error) {

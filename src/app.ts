@@ -5,11 +5,13 @@ dotenv.config();
 import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import swaggerUi from 'swagger-ui-express';
 import connectDB from './config/db';
 import triangleRoutes from './routes/triangle.routes';
 import healthRoutes from './routes/health.routes';
 import logger from './middleware/logger.middleware';
 import errorHandler from './middleware/error.middleware';
+import swaggerSpecs from './config/swagger';
 
 // Import logger
 import { info, error } from './utils/logger.utils';
@@ -50,6 +52,13 @@ app.use(express.static('public'));
 // Mount routes
 app.use('/api/triangles', triangleRoutes);
 app.use('/api/health', healthRoutes);
+
+// API Documentation with Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs, {
+  explorer: true,
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: 'Triangle API Documentation'
+}));
 
 // Simple ping endpoint for basic health checking
 app.get('/ping', (req, res) => {
