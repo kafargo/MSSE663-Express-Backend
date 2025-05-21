@@ -15,12 +15,12 @@ module.exports = {
   coverageDirectory: "coverage",
   globals: {
     "ts-jest": {
-      isolatedModules: true
-    }
+      isolatedModules: true,
+    },
   },
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1"
+    "^@/(.*)$": "<rootDir>/src/$1",
   },
   forceExit: true,
-  detectOpenHandles: true
+  detectOpenHandles: true,
 };
