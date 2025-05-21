@@ -10,7 +10,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed:import": "ts-node src/seeder.ts -i",
     "seed:delete": "ts-node src/seeder.ts -d",
-    "diagnose": "node diagnose.js"
+    "diagnose": "node diagnose.js",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix"
   },
   "repository": {
     "type": "git",
@@ -38,6 +40,9 @@
     "@types/express": "^5.0.2",
     "@types/mongoose": "^5.11.96",
     "@types/node": "^22.15.19",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint": "^8.56.0",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"

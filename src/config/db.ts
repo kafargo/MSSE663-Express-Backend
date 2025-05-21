@@ -7,7 +7,7 @@ const connectDB = async (): Promise<void> => {
   try {
     // Log environment information to help with debugging
     console.log(`Node Environment: ${process.env.NODE_ENV}`);
-    console.log(`Attempting to connect to MongoDB...`);
+    console.log('Attempting to connect to MongoDB...');
     
     // Check for environment variables
     const envKeys = Object.keys(process.env).filter(key => 
