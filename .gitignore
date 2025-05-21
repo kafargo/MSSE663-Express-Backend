@@ -53,6 +53,9 @@ web_modules/
 
 # Optional eslint cache
 .eslintcache
+# Duplicate ESLint config files
+eslint.config 2.js
+.eslintrc.*
 
 # Optional stylelint cache
 .stylelintcache
