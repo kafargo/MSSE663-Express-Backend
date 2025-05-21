@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import _mongoose from 'mongoose'; // Prefix with underscore to indicate unused import
 import dotenv from 'dotenv';
 import Triangle from './models/triangle.model';
 import connectDB from './config/db';
@@ -8,6 +8,7 @@ dotenv.config();
 
 // Sample triangle data
 const trianglesData = [
+  // Original triangles
   {
     sideA: 3,
     sideB: 4,
@@ -22,6 +23,92 @@ const trianglesData = [
     sideA: 7,
     sideB: 8,
     sideC: 9
+  },
+  // Additional triangles
+  {
+    sideA: 8,
+    sideB: 15,
+    sideC: 17
+  },
+  {
+    sideA: 6,
+    sideB: 8,
+    sideC: 10
+  },
+  {
+    sideA: 12,
+    sideB: 12,
+    sideC: 12
+  },
+  {
+    sideA: 6,
+    sideB: 6,
+    sideC: 10
+  },
+  {
+    sideA: 9,
+    sideB: 12,
+    sideC: 15
+  },
+  {
+    sideA: 10,
+    sideB: 10,
+    sideC: 16
+  },
+  {
+    sideA: 5,
+    sideB: 12,
+    sideC: 13
+  },
+  {
+    sideA: 7,
+    sideB: 24,
+    sideC: 25
+  },
+  {
+    sideA: 15,
+    sideB: 20,
+    sideC: 25
+  },
+  {
+    sideA: 8,
+    sideB: 8,
+    sideC: 8
+  },
+  {
+    sideA: 11,
+    sideB: 60,
+    sideC: 61
+  },
+  {
+    sideA: 28,
+    sideB: 45,
+    sideC: 53
+  },
+  {
+    sideA: 33,
+    sideB: 56,
+    sideC: 65
+  },
+  {
+    sideA: 12,
+    sideB: 35,
+    sideC: 37
+  },
+  {
+    sideA: 16,
+    sideB: 16,
+    sideC: 16
+  },
+  {
+    sideA: 13,
+    sideB: 14,
+    sideC: 15
+  },
+  {
+    sideA: 20,
+    sideB: 20,
+    sideC: 20
   }
 ];
 
