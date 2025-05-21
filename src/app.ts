@@ -11,8 +11,11 @@ import healthRoutes from './routes/health.routes';
 import logger from './middleware/logger.middleware';
 import errorHandler from './middleware/error.middleware';
 
+// Import logger
+import { info, error } from './utils/logger.utils';
+
 // Log environment details on startup
-console.log(`Starting app in ${process.env.NODE_ENV} environment`);
+info(`Starting app in ${process.env.NODE_ENV} environment`);
 
 // Connect to MongoDB
 connectDB();
@@ -50,7 +53,7 @@ app.use('/api/health', healthRoutes);
 
 // Simple ping endpoint for basic health checking
 app.get('/ping', (req, res) => {
-  console.log('Ping endpoint called');
+  info('Ping endpoint called');
   res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
@@ -67,12 +70,12 @@ const PORT = process.env.PORT || 3000;
 
 // Start server
 const server = app.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+  info(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
 });
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err: Error) => {
-  console.log(`Unhandled Rejection: ${err.message}`);
+  error(`Unhandled Rejection: ${err.message}`, err);
   // Close server & exit process
   server.close(() => process.exit(1));
 });

@@ -1,4 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
+import { isValidTriangle } from '../utils/triangle.utils';
 
 // Interface for Triangle document
 export interface ITriangle extends Document {
@@ -33,6 +34,16 @@ const triangleSchema = new Schema<ITriangle>(
     collection: 'triangle' // Specify the collection name
   }
 );
+
+// Pre-save middleware to validate triangle
+triangleSchema.pre('save', function(next) {
+  // Check if the triangle is valid
+  if (!isValidTriangle(this.sideA, this.sideB, this.sideC)) {
+    const error = new Error('Invalid triangle: The sum of the lengths of any two sides must be greater than the length of the remaining side');
+    return next(error);
+  }
+  next();
+});
 
 // Virtual property for calculating area using Heron's formula
 triangleSchema.virtual('area').get(function() {

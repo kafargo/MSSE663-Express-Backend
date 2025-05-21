@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import os from 'os';
+import { errorResponse } from '../utils/error.utils';
+import { info, debug } from '../utils/logger.utils';
 
 /**
  * Get health status of the application
@@ -8,9 +10,11 @@ import os from 'os';
  */
 export const getHealthStatus = async (req: Request, res: Response): Promise<void> => {
   try {
-    console.log('Health check endpoint called:', new Date().toISOString());
-    console.log('Request URL:', req.originalUrl);
-    console.log('Request headers:', req.headers);
+    info('Health check endpoint called');
+    debug('Health check details', { 
+      url: req.originalUrl,
+      timestamp: new Date().toISOString()
+    });
     
     // Check MongoDB connection status
     const dbStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';
@@ -75,9 +79,6 @@ export const getHealthStatus = async (req: Request, res: Response): Promise<void
       }
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error instanceof Error ? error.message : 'Server Error'
-    });
+    errorResponse(res, 500, error);
   }
 };

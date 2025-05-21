@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import Triangle, { ITriangle } from '../models/triangle.model';
+import { errorResponse, handleValidationError } from '../utils/error.utils';
+import { isValidTriangle } from '../utils/triangle.utils';
 
 // Get all triangles
 export const getTriangles = async (req: Request, res: Response): Promise<void> => {
@@ -11,10 +13,7 @@ export const getTriangles = async (req: Request, res: Response): Promise<void> =
       data: triangles
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error instanceof Error ? error.message : 'Server Error'
-    });
+    errorResponse(res, 500, error);
   }
 };
 
@@ -24,10 +23,7 @@ export const getTriangleById = async (req: Request, res: Response): Promise<void
     const triangle = await Triangle.findById(req.params.id);
     
     if (!triangle) {
-      res.status(404).json({
-        success: false,
-        error: 'Triangle not found'
-      });
+      errorResponse(res, 404, 'Triangle not found');
       return;
     }
 
@@ -36,35 +32,15 @@ export const getTriangleById = async (req: Request, res: Response): Promise<void
       data: triangle
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error instanceof Error ? error.message : 'Server Error'
-    });
+    errorResponse(res, 500, error);
   }
 };
 
 // Create a new triangle
 export const createTriangle = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { sideA, sideB, sideC } = req.body;
-    
-    // Validate input
-    if (sideA === undefined || sideB === undefined || sideC === undefined) {
-      res.status(400).json({
-        success: false,
-        error: 'Please provide all three sides (sideA, sideB, sideC)'
-      });
-      return;
-    }
-
-    // Check if triangle is valid using triangle inequality theorem
-    if (!(sideA + sideB > sideC && sideA + sideC > sideB && sideB + sideC > sideA)) {
-      res.status(400).json({
-        success: false,
-        error: 'Invalid triangle: The sum of the lengths of any two sides must be greater than the length of the remaining side'
-      });
-      return;
-    }
+    // Input validation is handled by middleware
+    // Triangle geometry validation is handled by model middleware
     
     const triangle = await Triangle.create(req.body);
 
@@ -73,42 +49,20 @@ export const createTriangle = async (req: Request, res: Response): Promise<void>
       data: triangle
     });
   } catch (error) {
-    if (error instanceof Error && error.name === 'ValidationError') {
-      const messages = Object.values(error).map(val => val.message);
-      res.status(400).json({
-        success: false,
-        error: messages
-      });
-    } else {
-      res.status(500).json({
-        success: false,
-        error: error instanceof Error ? error.message : 'Server Error'
-      });
-    }
+    handleValidationError(res, error);
   }
 };
 
 // Update triangle
 export const updateTriangle = async (req: Request, res: Response): Promise<void> => {
   try {
+    // Input validation is handled by middleware
     const { sideA, sideB, sideC } = req.body;
-    
-    // Validate input
-    if (sideA === undefined && sideB === undefined && sideC === undefined) {
-      res.status(400).json({
-        success: false,
-        error: 'Please provide at least one side to update (sideA, sideB, or sideC)'
-      });
-      return;
-    }
     
     let triangle = await Triangle.findById(req.params.id);
     
     if (!triangle) {
-      res.status(404).json({
-        success: false,
-        error: 'Triangle not found'
-      });
+      errorResponse(res, 404, 'Triangle not found');
       return;
     }
 
@@ -119,14 +73,9 @@ export const updateTriangle = async (req: Request, res: Response): Promise<void>
       sideC: sideC !== undefined ? sideC : triangle.sideC
     };
     
-    // Check if triangle is valid using triangle inequality theorem
-    if (!(updatedTriangle.sideA + updatedTriangle.sideB > updatedTriangle.sideC && 
-          updatedTriangle.sideA + updatedTriangle.sideC > updatedTriangle.sideB && 
-          updatedTriangle.sideB + updatedTriangle.sideC > updatedTriangle.sideA)) {
-      res.status(400).json({
-        success: false,
-        error: 'Invalid triangle: The sum of the lengths of any two sides must be greater than the length of the remaining side'
-      });
+    // Validate triangle geometry
+    if (!isValidTriangle(updatedTriangle.sideA, updatedTriangle.sideB, updatedTriangle.sideC)) {
+      errorResponse(res, 400, 'Invalid triangle: The sum of the lengths of any two sides must be greater than the length of the remaining side');
       return;
     }
 
@@ -140,17 +89,7 @@ export const updateTriangle = async (req: Request, res: Response): Promise<void>
       data: triangle
     });
   } catch (error) {
-    if (error instanceof Error && error.name === 'ValidationError') {
-      res.status(400).json({
-        success: false,
-        error: error.message
-      });
-    } else {
-      res.status(500).json({
-        success: false,
-        error: error instanceof Error ? error.message : 'Server Error'
-      });
-    }
+    handleValidationError(res, error);
   }
 };
 
@@ -160,10 +99,7 @@ export const deleteTriangle = async (req: Request, res: Response): Promise<void>
     const triangle = await Triangle.findById(req.params.id);
     
     if (!triangle) {
-      res.status(404).json({
-        success: false,
-        error: 'Triangle not found'
-      });
+      errorResponse(res, 404, 'Triangle not found');
       return;
     }
 
@@ -174,9 +110,41 @@ export const deleteTriangle = async (req: Request, res: Response): Promise<void>
       data: {}
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error instanceof Error ? error.message : 'Server Error'
+    errorResponse(res, 500, error);
+  }
+};
+
+/**
+ * Calculate the area of a triangle
+ * @route GET /api/triangles/:id/area
+ */
+export const calculateTriangleArea = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const triangle = await Triangle.findById(req.params.id);
+    
+    if (!triangle) {
+      errorResponse(res, 404, 'Triangle not found');
+      return;
+    }
+
+    // Calculate area using Heron's formula
+    // First, calculate the semi-perimeter
+    const s = (triangle.sideA + triangle.sideB + triangle.sideC) / 2;
+    // Then, calculate the area
+    const area = Math.sqrt(s * (s - triangle.sideA) * (s - triangle.sideB) * (s - triangle.sideC));
+
+    res.status(200).json({
+      success: true,
+      data: {
+        triangleId: triangle._id,
+        sideA: triangle.sideA,
+        sideB: triangle.sideB,
+        sideC: triangle.sideC,
+        area,
+        perimeter: triangle.sideA + triangle.sideB + triangle.sideC
+      }
     });
+  } catch (error) {
+    errorResponse(res, 500, error);
   }
 };

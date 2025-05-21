@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import Triangle from '../models/triangle.model';
+import { errorResponse } from '../utils/error.utils';
 
 /**
  * Calculate the area of a triangle
@@ -10,10 +11,7 @@ export const calculateTriangleArea = async (req: Request, res: Response): Promis
     const triangle = await Triangle.findById(req.params.id);
     
     if (!triangle) {
-      res.status(404).json({
-        success: false,
-        error: 'Triangle not found'
-      });
+      errorResponse(res, 404, 'Triangle not found');
       return;
     }
 
@@ -35,9 +33,6 @@ export const calculateTriangleArea = async (req: Request, res: Response): Promis
       }
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error instanceof Error ? error.message : 'Server Error'
-    });
+    errorResponse(res, 500, error);
   }
 };

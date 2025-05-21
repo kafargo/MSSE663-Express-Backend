@@ -4,21 +4,22 @@ import {
   getTriangleById,
   createTriangle,
   updateTriangle,
-  deleteTriangle
+  deleteTriangle,
+  calculateTriangleArea
 } from '../controllers/triangle.controller';
-import { calculateTriangleArea } from '../controllers/area.controller';
+import { validateRequest, triangleValidator } from '../middleware/validate.middleware';
 
 const router = Router();
 
 // Routes for /api/triangles
 router.route('/')
   .get(getTriangles)
-  .post(createTriangle);
+  .post(validateRequest(triangleValidator), createTriangle);
 
 // Routes for /api/triangles/:id
 router.route('/:id')
   .get(getTriangleById)
-  .put(updateTriangle)
+  .put(validateRequest(triangleValidator), updateTriangle)
   .delete(deleteTriangle);
 
 // Routes for /api/triangles/:id/area

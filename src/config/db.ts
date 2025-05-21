@@ -1,19 +1,15 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import { info, error, debug } from '../utils/logger.utils';
 
 const connectDB = async (): Promise<void> => {
   try {
     // Log environment information to help with debugging
-    console.log(`Node Environment: ${process.env.NODE_ENV}`);
-    console.log('Attempting to connect to MongoDB...');
+    info(`Node Environment: ${process.env.NODE_ENV}`);
+    info('Attempting to connect to MongoDB...');
     
-    // Check for environment variables
-    const envKeys = Object.keys(process.env).filter(key => 
-      !key.startsWith('npm_') && !key.startsWith('_')
-    );
-    console.log(`Available environment variables: ${envKeys.join(', ')}`);
+    // Check for environment variables - only log critical ones
+    const criticalVars = ['MONGO_URI', 'NODE_ENV', 'PORT'].filter(key => process.env[key]);
+    debug(`Critical environment variables available: ${criticalVars.join(', ')}`);
     
     const mongoURI = process.env.MONGO_URI as string;
     if (!mongoURI) {
@@ -27,10 +23,10 @@ const connectDB = async (): Promise<void> => {
     };
     
     const conn = await mongoose.connect(mongoURI);
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
-  } catch (error) {
-    console.error(`MongoDB Connection Error: ${error instanceof Error ? error.message : String(error)}`);
-    console.log('Check your MongoDB connection string and ensure the database server is accessible');
+    info(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (err) {
+    error(`MongoDB Connection Error: ${err instanceof Error ? err.message : String(err)}`, err);
+    info('Check your MongoDB connection string and ensure the database server is accessible');
     // Don't exit the process in development mode, to allow fixing and restarting
     if (process.env.NODE_ENV === 'production') {
       process.exit(1);

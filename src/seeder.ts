@@ -1,10 +1,7 @@
 import _mongoose from 'mongoose'; // Prefix with underscore to indicate unused import
-import dotenv from 'dotenv';
 import Triangle from './models/triangle.model';
 import connectDB from './config/db';
-
-// Load env variables
-dotenv.config();
+import { info, error } from './utils/logger.utils';
 
 // Sample triangle data
 const trianglesData = [
@@ -124,10 +121,10 @@ const importData = async (): Promise<void> => {
     // Insert new data
     await Triangle.insertMany(trianglesData);
 
-    console.log('Data Imported!');
+    info('Data Imported!');
     process.exit();
   } catch (err) {
-    console.error(err);
+    error('Data import failed', err);
     process.exit(1);
   }
 };
@@ -137,10 +134,10 @@ const deleteData = async (): Promise<void> => {
   try {
     await Triangle.deleteMany({});
 
-    console.log('Data Destroyed!');
+    info('Data Destroyed!');
     process.exit();
   } catch (err) {
-    console.error(err);
+    error('Data deletion failed', err);
     process.exit(1);
   }
 };
@@ -151,6 +148,7 @@ if (process.argv[2] === '-i') {
 } else if (process.argv[2] === '-d') {
   deleteData();
 } else {
-  console.log('Please provide a valid command: -i (import) or -d (delete)');
+  error('Invalid command', { command: process.argv[2] });
+  info('Please provide a valid command: -i (import) or -d (delete)');
   process.exit(1);
 }

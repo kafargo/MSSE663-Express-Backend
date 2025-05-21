@@ -17,11 +17,8 @@ if [ $? -eq 0 ]; then
     echo "Copying additional files..."
     cp -r public dist/
     
-    # Copy .env file for local testing if it exists (won't be used in Railway)
-    if [ -f .env ]; then
-        echo "Copying .env file for local testing..."
-        cp .env dist/
-    fi
+    # Do not copy .env file for security reasons
+    echo "Note: .env file is not copied to dist for security reasons."
     
     echo "Project is ready to run!"
 else

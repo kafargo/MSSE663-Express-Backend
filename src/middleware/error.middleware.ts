@@ -1,4 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
+import { errorResponse } from '../utils/error.utils';
+import { error as logError } from '../utils/logger.utils';
 
 interface ErrorResponse extends Error {
   statusCode?: number;
@@ -8,8 +10,8 @@ const errorHandler = (err: ErrorResponse, req: Request, res: Response, next: Nex
   let error = { ...err };
   error.message = err.message;
 
-  // Log to console for developer
-  console.error(err);
+  // Log error with Winston
+  logError(`Error: ${err.name}`, err);
 
   // Mongoose bad ObjectId
   if (err.name === 'CastError') {
@@ -32,10 +34,7 @@ const errorHandler = (err: ErrorResponse, req: Request, res: Response, next: Nex
     error.statusCode = 400;
   }
 
-  res.status(error.statusCode || 500).json({
-    success: false,
-    error: error.message || 'Server Error'
-  });
+  errorResponse(res, error.statusCode || 500, error.message || 'Server Error');
 };
 
 export default errorHandler;
