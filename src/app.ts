@@ -34,11 +34,7 @@ app.use(logger);
 
 // Security middleware
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? process.env.FRONTEND_URL 
-      ? [process.env.FRONTEND_URL, 'https://*.railway.app'] 
-      : ['https://*.railway.app']
-    : '*', // Allow all origins in development
+  origin: '*', // Allow all origins
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
